@@ -5,3 +5,5 @@
 /val_dataset/
 /venv/
 /predictions/
+/train_dataset/
+__pycache__
