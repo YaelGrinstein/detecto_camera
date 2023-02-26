@@ -35,8 +35,9 @@ def parse_args():
     parser.add_argument('-b', '--batch_size', default=2, type=int,  help='Training batch size')
     parser.add_argument('-fsc', '--foscam', type=bool, default=False, help='data source from live camera foscam')
     parser.add_argument('-server','--run_server', type=bool, default=False, help='run with server')
-    parser.add_argument('-m', '--model',  default='detecto_model_idans_data.pth', type=str,
-                        help='Model name')
+    parser.add_argument('-m', '--model',  default='detecto_model_idans_data.pth', type=str, help='Model name')
+    parser.add_argument('-oos', '--outs_of_sample',  default=False, type=str, help='evaluate over out of samlple data ')
+
 
     return parser.parse_args()
 
@@ -67,9 +68,12 @@ def main():
         model.save(args.model)
 
     #Evaluation
+    model_path = os.path.join(main_dir, args.model)
     if args.eval:
-        model_path = os.path.join(main_dir, args.model)
-        evaluate(model_path, test_dir, LABELS, prediction_dir)
+        evaluate(model_path, test_dir, LABELS, prediction_dir, OutOfSample=False)
+    if args.out_of_sample:
+        out_of_sample = os.path.join(main_dir, "out_of_sample")
+        evaluate(model_path, out_of_sample, LABELS, prediction_dir, OutOfSample=True)
 
     if args.foscam:
         predict_from_foscam(args.model, LABELS, prediction_dir)

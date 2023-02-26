@@ -7,14 +7,18 @@ import glob
 import cv2
 
 
-def evaluate(model, test, gt_labels, output_path):
+def evaluate(model, test, gt_labels, output_path,  OutOfSample=False):
     thresh = 0.6
 
     model = Model.load(model, gt_labels)
+
     test_data = natsorted(glob.glob(test + "/*.png"))
 
     for i, image_path in enumerate(test_data):
-        img_id = image_path.split('test_dir/')[1].split('.png')[0]
+        if OutOfSample:
+            img_id = image_path.split('out_of_sample/')[1].split('.png')[0]
+        else:
+            img_id = image_path.split('test_dir/')[1].split('.png')[0]
         image = read_image(image_path)
         start = time()
         labels, boxes, scores = model.predict(image)
