@@ -7,3 +7,5 @@
 /predictions/
 /train_dataset/
 __pycache__
+*.pth
+.idea
